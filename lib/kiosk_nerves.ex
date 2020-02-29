@@ -1,4 +1,6 @@
 defmodule KioskNerves do
+  require Logger
+
   @moduledoc """
   Documentation for KioskNerves.
   """
@@ -13,6 +15,7 @@ defmodule KioskNerves do
 
   """
   def hello do
+    Logger.debug("Hello")
     :world
   end
 end
