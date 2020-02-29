@@ -23,6 +23,18 @@ config :nerves, source_date_epoch: "1582989840"
 
 config :logger, backends: [RingLogger]
 
+config :webengine_kiosk,
+  fullscreen: false
+
 if Mix.target() != :host do
   import_config "target.exs"
 end
+
+import_config "../../kiosk_phx/config/config.exs"
+
+config :kiosk_phx, KioskPhxWeb.Endpoint,
+  http: [port: 4000],
+  server: true,
+  code_reloader: false,
+  check_origin: false,
+  watchers: []

@@ -30,3 +30,16 @@ To start your Nerves app:
   * Forum: https://elixirforum.com/c/nerves-forum
   * Discussion Slack elixir-lang #nerves ([Invite](https://elixir-slackin.herokuapp.com/))
   * Source: https://github.com/nerves-project/nerves
+
+### if cant compile webengine_kiosk
+`brew link qt5 --force`
+
+TXsm0920
+
+
+System.put_env("QTWEBENGINE_REMOTE_DEBUGGING", "9222")
+MuonTrap.Daemon.start_link("socat", ["tcp-listen:9223,fork", "tcp:localhost:9222"])
+
+WebengineKiosk.go_to_url(Display, "http://192.168.167.90:4000")
+
+File.write! "/sys/class/backlight/rpi_backlight/brightness", "0"

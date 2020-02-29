@@ -42,7 +42,23 @@ config :nerves_firmware_ssh,
 config :vintage_net,
   regulatory_domain: "US",
   config: [
-    {"eth0", %{type: VintageNetDirect}}
+    {"eth0",
+     %{
+       type: VintageNetDirect
+     }},
+    {"wlan0",
+     %{
+       type: VintageNetWiFi,
+       vintage_net_wifi: %{
+         networks: [
+           %{
+             key_mgmt: :wpa_psk,
+             ssid: "Capital Factory Members",
+             psk: "TXsm0920"
+           }
+         ]
+       }
+     }}
   ]
 
 config :mdns_lite,
@@ -52,7 +68,7 @@ config :mdns_lite,
   # "nerves.local" for convenience. If more than one Nerves device is on the
   # network, delete "nerves" from the list.
 
-  host: [:hostname, "nerves"],
+  host: [:hostname, "bryan"],
   ttl: 120,
 
   # Advertise the following services over mDNS.
@@ -76,6 +92,12 @@ config :mdns_lite,
       port: 4369
     }
   ]
+
+config :webengine_kiosk,
+  uid: "kiosk",
+  gid: "kiosk",
+  data_dir: "/root/kiosk",
+  homepage: "http://localhost:4000"
 
 # Import target specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

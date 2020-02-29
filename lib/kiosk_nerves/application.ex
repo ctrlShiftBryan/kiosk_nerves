@@ -8,7 +8,10 @@ defmodule KioskNerves.Application do
   def start(_type, _args) do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    # true = false
+    target() |> platform_init()
+
+    webengine_kiosk_opts = Application.get_all_env(:webengine_kiosk)
+
     opts = [strategy: :one_for_one, name: KioskNerves.Supervisor]
 
     children =
@@ -16,9 +19,22 @@ defmodule KioskNerves.Application do
         # Children for all targets
         # Starts a worker by calling: KioskNerves.Worker.start_link(arg)
         # {KioskNerves.Worker, arg},
+        {WebengineKiosk, {webengine_kiosk_opts, [name: Display]}}
       ] ++ children(target())
 
     Supervisor.start_link(children, opts)
+  end
+
+  def platform_init(:host), do: :ok
+
+  def platform_init(_target) do
+    :os.cmd('udevd -d')
+    :os.cmd('udevadm trigger --type=subsystems --action=add')
+    :os.cmd('udevadm trigger --type=devices --action=add')
+    :os.cmd('udevadm settle --timeout=30')
+
+    System.put_env("QTWEBENGINE_REMOTE_DEBUGGING", "9222")
+    MuonTrap.Daemon.start_link("socat", ["tcp-listen:9223,fork", "tcp:localhost:9222"])
   end
 
   # List all child processes to be supervised

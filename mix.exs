@@ -48,6 +48,7 @@ defmodule KioskNerves.MixProject do
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.6", targets: @all_targets},
       {:nerves_pack, "~> 0.2", targets: @all_targets},
+      {:kiosk_phx, path: "../kiosk_phx"},
 
       # Dependencies for specific targets
       # {:nerves_system_rpi3, "~> 1.10", runtime: false, targets: :rpi3},
